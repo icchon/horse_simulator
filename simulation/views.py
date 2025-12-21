@@ -1,0 +1,94 @@
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
+from simulation.horse import get_simulation_dict
+import json
+import numpy as np
+import sys
+import os
+from .forms import MyForm
+import re
+
+
+def home(request):
+   return render(request, "simulation/home.html")
+
+speed_to_bins = {
+   "low":40, # グラフの粒度を細かく
+   "medium":20,
+   "high":10, # グラフの粒度を粗く
+}
+
+speed_to_test_size = {
+    "low":0.3, # 予測データ量を多く
+    "medium":0.3,
+    "high":0.1, # 予測データ量を少なく
+}
+
+def heavy_function(features, speed, feature_combinations):
+    n_bins = speed_to_bins[speed]
+    test_size = speed_to_test_size[speed]
+    
+    output, columns = get_simulation_dict(n_bins=n_bins, features=features, test_size=test_size, feature_combinations=feature_combinations)
+    labels = list(output["bet_percent"])
+    data = list(output["kaishuuritu"])
+    
+    
+    #print(columns)
+    return labels, data
+
+def extract_string(input_string):
+    pattern = r'[^\\\\\\n\\r\s&delete&・ ]+'
+    result_list = re.findall(pattern, input_string)
+    return result_list
+
+
+def simulation(request):
+    if request.method == "POST":
+        print(f"DEBUG: Request Body: {request.body}") # デバッグプリント
+        # JSONデータを解析
+        try:
+            json_data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+        form = MyForm(data=json_data) # JSONデータをフォームにバインド
+
+        if form.is_valid():
+            features = {}
+            for field_name, field_value in form.cleaned_data.items():
+                if field_value: # BooleanFieldなのでTrue/Falseで判定
+                    features[field_name] = field_value
+
+            # generated_features はJSONデータから直接取得
+            generated_features_str = json_data.get('generated_features', '')
+            generated_features = generated_features_str.split(',')
+            feature_combinations = []
+            for generated_feature in generated_features:
+                li = [MyForm.display_to_feature[display] for display in extract_string(generated_feature)]
+                if len(li) > 0:
+                   feature_combinations.append(li)
+                    
+            labels = []
+            data = []
+            speed = json_data.get("speed") # JSONデータからspeedを取得
+            if speed not in speed_to_bins:
+                speed = "low"  # デフォルト値
+            labels, data = heavy_function(features=features, speed=speed, feature_combinations=feature_combinations)
+            
+            my_dict = {
+                "labels": labels,
+                "data": data,
+                "form": form,
+            }
+
+            print("--------------------------------------")
+
+            return render(request, "simulation/simulation.html", my_dict)
+    else:
+        form = MyForm()
+        my_dict = {
+            "labels": [],
+            "data": [],
+            "form": form,
+        }
+        return render(request, "simulation/simulation.html", my_dict)
