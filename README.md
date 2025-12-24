@@ -1,7 +1,7 @@
 
-<p align="center"><h1 align="center">Horse Simulator</h1></p>
+<p align="center"><h1 align="center">horse simulator</h1></p>
 
-<p align="center">DjangoとLightGBMを用いた競馬予測シミュレーションWebアプリケーション</p>
+<p align="center">カスタム特徴量での機械学習競馬シミュレーションwebアプリ</p>
 
 <p align="center"><a href="./LICENSE"><img src="https://img.shields.io/github/license/icchon/horse_sumilator" alt="license"></a></p>
 
@@ -21,9 +21,14 @@
 
 ---
 
+![](./docs/image1.png)
+![](./docs/image2.png)
+![](./docs/image3.png)
+![](./docs/image4.png)
+
 ## Overview
 
-`Horse Simulator`は、DjangoとLightGBMを用いて構築された競馬予測シミュレーションWebアプリケーションである。ユーザーが選択した特徴量に基づき、過去のレースデータを用いて機械学習モデルのパフォーマンス（回収率など）をシミュレーションする。
+競馬に関する特徴量を組み合わせることにより特徴量をWEBから作成でき、それをもとに学習させた機械学習モデルを実際の競馬のデータを持ちてシミュレーションすることができる
 
 ---
 
@@ -37,49 +42,30 @@
 
 - **機械学習モデル:** `LightGBM`（勾配ブースティング）による回帰モデルを実装している。
 
-- **結果の可視化:** `Chart.js`を使用し、賭けた割合に対する回収率の変化を折れ線グラフで表示する。
+- **結果の可視化:** 賭けた割合に対する回収率の変化を折れ線グラフで表示する。
 
 ---
 
-## Technology Stack
-
-- **Backend:** Django
-
-- **Frontend:** HTML, CSS, JavaScript, Chart.js
-
-- **ML/Data Science:** Scikit-learn, Pandas, LightGBM
+## Architecture
+![architecture](./docs/architecture.png)
 
 ---
-
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.x
-
-- `requirements.txt`に記載されたライブラリ
+- **docker** (`29.1.3` or later)
+- **docker compose** (`5.0.1` or later)
 
 ### Installation
 
 ```sh
-
 ❯ git clone https://github.com/icchon/horse_sumilator
-
 ❯ cd horse_sumilator
-
-❯ pip install -r requirements.txt
-
+❯ cp .env.example .env
+❯ docker-compose up --build -d
 ```
-
-### Usage
-
-```sh
-
-❯ python manage.py runserver
-
-```
-
-開発サーバーを起動し、Webブラウザで指定されたURL（例: `http://127.0.0.1:8000/`）にアクセスする。
+その後、 `http://localhost/` にアクセス
 
 ---
 

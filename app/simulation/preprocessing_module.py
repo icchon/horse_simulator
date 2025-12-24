@@ -33,10 +33,10 @@ class Encoder(OrdinalEncoder):
 class Operation():
     def __init__(self, function, separator : str):
         self.function = function
-        self.separator = "_" + separator + "_"
+        self.separator = separator
 
     def result_col_name(self, *cols):
-        return self.separator.join(cols)
+        return f"({self.separator.join(cols)})"
 
 class Abstract_synthesis():
     def __init__(self, cols, operation : Operation):
@@ -51,10 +51,10 @@ class Abstract_synthesis():
     def apply_feature(self, X):
         X[self.col] = self.extract_feature(X)
 
-DIV = Operation(lambda x, y: x/y if y != 0 else x, "divided_by")
-MUL = Operation(lambda x, y: x*y, "multiplied_by")
-CDIV = Operation(lambda x, y: x/(y + 1), "divided_by_plus_one")
-SUM = Operation(lambda x, y: x + y, "sum")
+DIV = Operation(lambda x, y: np.divide(x, y, out=np.zeros_like(x, dtype=float), where=y!=0), "/")
+MUL = Operation(lambda x, y: x*y, "*")
+CDIV = Operation(lambda x, y: x/(y + 1), "/(+1)")
+SUM = Operation(lambda x, y: x + y, "+")
 
 class SynthesisReactor(TransformerMixin):
     def __init__(self, params):

@@ -15,22 +15,22 @@ class SimulationConfig(AppConfig):
     def ready(self):
         # 循環参照を避けるため、ready()内でインポート
         
-        try:
-            simulation.horse.PRETRAINED_MODEL = joblib.load(MODEL_PATH)
-            # print(f"Model loaded from {MODEL_PATH}")
+        # try:
+        #     simulation.horse.PRETRAINED_MODEL = joblib.load(MODEL_PATH)
+        #     # print(f"Model loaded from {MODEL_PATH}")
 
-            # カラムリストをロードし、simulation.horseモジュールに設定
-            with open(COLUMNS_PATH, 'r') as f:
-                simulation.horse.MODEL_COLUMNS = json.load(f)
-            # print(f"Model columns loaded from {COLUMNS_PATH}")
-        except FileNotFoundError:
-            simulation.horse.PRETRAINED_MODEL = None
-            simulation.horse.MODEL_COLUMNS = None
-            # print(f"Warning: Model or column file not found. Please ensure {MODEL_PATH} and {COLUMNS_PATH} exist.")
-        except Exception as e:
-            # print(f"Error loading model or columns: {e}")
-            simulation.horse.PRETRAINED_MODEL = None
-            simulation.horse.MODEL_COLUMNS = None
+        #     # カラムリストをロードし、simulation.horseモジュールに設定
+        #     with open(COLUMNS_PATH, 'r') as f:
+        #         simulation.horse.MODEL_COLUMNS = json.load(f)
+        #     # print(f"Model columns loaded from {COLUMNS_PATH}")
+        # except FileNotFoundError:
+        #     simulation.horse.PRETRAINED_MODEL = None
+        #     simulation.horse.MODEL_COLUMNS = None
+        #     # print(f"Warning: Model or column file not found. Please ensure {MODEL_PATH} and {COLUMNS_PATH} exist.")
+        # except Exception as e:
+        #     # print(f"Error loading model or columns: {e}")
+        #     simulation.horse.PRETRAINED_MODEL = None
+        #     simulation.horse.MODEL_COLUMNS = None
 
         # --- data.json のロード ---
         DATA_JSON_PATH = os.path.join(settings.BASE_DIR, "data", "data.json")

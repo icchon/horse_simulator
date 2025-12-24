@@ -16,6 +16,11 @@
   padding-right: 20px;
   padding-left:20px;
   border-radius: 1px;
+  transition: transform 0.3s ease;
+}
+
+.form-container.shifted {
+  transform: translateX(250px);
 }
 
 .graph-container {
@@ -65,6 +70,7 @@ header {
   color: white;
   padding: 20px;
   position:relative;
+  z-index: 101;
 }
 
 
@@ -106,7 +112,7 @@ header {
   width:250px;
   height:100%;
   background-color:rgba(0, 0, 0, 0.9);
-  
+  z-index: 100;
   color:white;
   padding:20px;
   transition:left 0.3s ease;
@@ -437,15 +443,22 @@ main {
 
 .feature-generation {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
-.feature-container, .generation-container {
-  width: 45%;
+.feature-container, .generation-zone {
+  width: 32%;
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.generation-container {
+  width: auto;
+  padding: 0;
+  border: none;
 }
 
 .feature-list, .generation-list {
@@ -453,6 +466,8 @@ main {
   padding-left:60px;
   padding-right:60px;
   padding-top:30px;
+  max-height: 150px; /* Adjust as needed */
+  overflow-y: auto;
 }
 
 .feature-item {
@@ -462,12 +477,13 @@ main {
   border-radius: 3px;
   cursor: move;
   text-align: center;
+  color: #000;
 
 }
 
 
 .generation-list {
-  min-height: 100px;
+  min-height: 80px;
   border: 1px dashed #ccc;
   margin-bottom: 10px;
 }
@@ -478,7 +494,11 @@ main {
 
 
 .generated-features-container {
-  margin-top: 20px;
+  width: 32%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 0px;
 }
 
 .generated-features-container h5 {
@@ -491,5 +511,71 @@ main {
 }
 
 #generated-features-list li {
+
   margin-bottom: 5px;
+
+}
+
+
+
+/* Custom Accordion Styles */
+
+.accordion-item {
+
+  background-color: #444;
+
+  border: 1px solid #555;
+
+  color: #fff;
+
+}
+
+
+
+.accordion-header .accordion-button {
+
+  background-color: #343a40;
+
+  color: #fff;
+
+  font-weight: bold;
+
+}
+
+
+
+.accordion-button:not(.collapsed) {
+
+  color: #fff;
+
+  background-color: #3a4147;
+
+}
+
+
+
+.accordion-button:focus {
+
+  box-shadow: none;
+
+  border-color: rgba(0,0,0,.125);
+
+}
+
+
+
+.accordion-button::after {
+
+  filter: invert(1) grayscale(100);
+
+}
+
+
+
+.accordion-body {
+
+  background-color: #494949;
+
+  color: #fff;
+
 }
